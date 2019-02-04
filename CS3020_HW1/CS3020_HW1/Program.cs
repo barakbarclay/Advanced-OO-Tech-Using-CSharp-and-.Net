@@ -1,4 +1,6 @@
-﻿using System;
+﻿//Basic C# program using looping, conditionals, and methods
+//Looping menu explains what each method does
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
