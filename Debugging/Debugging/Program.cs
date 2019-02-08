@@ -156,7 +156,7 @@ namespace Debugging
 
             //For each possible type of coin, sum every line containing that coin and turn it into dollar format (half dollar = .5 dollars)
             currency.Add("HALFDOLLAR", lines.Sum(t => t.Contains("HALFDOLLAR") ? float.Parse(t.Substring(11)) * .5f : 0));
-            currency.Add("QUARTER", lines.Sum(t => t.Contains("QUARTER") ? float.Parse(t.Substring(8)) * .25f : 0));//was 7
+            currency.Add("QUARTER", lines.Sum(t => t.Contains("QUARTER") ? float.Parse(t.Substring(8)) * .25f : 0));
             currency.Add("DIME", lines.Sum(t => t.Contains("DIME") ? float.Parse(t.Substring(5)) * .1f : 0));
             currency.Add("NICKEL", lines.Sum(t => t.Contains("NICKEL") ? float.Parse(t.Substring(7)) * .5f : 0));
             currency.Add("PENNY", lines.Sum(t => t.Contains("PENNY") ? float.Parse(t.Substring(6)) * .1f : 0));
@@ -214,16 +214,15 @@ namespace Debugging
                         blocked += "*";
 
                     //replace the word with the censor
-                    lines[i].Replace(censor, blocked);
+                    lines[i] = lines[i].Replace(censor, blocked);
                 }
             }
-
             //Add some spaces between the raw text vs censored text
             int count = 5;
             do
             {
                 Console.WriteLine();
-                count++;
+                count--;
             } while (count > 0);
 
             //Print out the lines after censorship
