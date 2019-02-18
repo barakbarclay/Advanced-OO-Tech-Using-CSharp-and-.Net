@@ -23,7 +23,8 @@ namespace FolderTreeLab
                 //{
                     foreach (FileInfo file in new DirectoryInfo(directory.FullName).GetFiles())
                     {
-                        Console.WriteLine(directory.FullName);
+                        Console.WriteLine(directory.FullName); // IMPORTANT: directory.FullName is used rather than using and modifying path b/c a new 
+                                                               // copy of path isn't made for each iteration of the foreach loop like the recusive method call
                         return;
                     }
 
