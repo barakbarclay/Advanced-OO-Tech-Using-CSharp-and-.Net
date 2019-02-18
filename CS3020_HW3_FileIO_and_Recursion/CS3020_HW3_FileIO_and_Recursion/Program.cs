@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.IO;
 
-namespace HW3_FileIO_and_Recursion
+namespace CS3020_HW3_FileIO_and_Recursion
 {
     class Program
     {
@@ -33,7 +33,7 @@ namespace HW3_FileIO_and_Recursion
                 Console.WriteLine("Enter path (Ex. C:\\Users\\Barak\\Documents).");
                 paths[i] = Console.ReadLine();
             }
-            
+
             foreach (string path in paths)
             {
                 FindAndCopyFilesInTopLevelDir(path, fileTypes);

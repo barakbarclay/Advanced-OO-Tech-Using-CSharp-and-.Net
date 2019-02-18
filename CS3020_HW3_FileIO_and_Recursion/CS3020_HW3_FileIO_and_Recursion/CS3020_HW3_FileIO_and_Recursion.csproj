@@ -4,10 +4,10 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{CBC4D56E-B1C8-4E5E-906B-318D11CE5F14}</ProjectGuid>
+    <ProjectGuid>{989873F8-3C91-4B9A-BA61-AC40B32885E6}</ProjectGuid>
     <OutputType>Exe</OutputType>
-    <RootNamespace>HW3_FileIO_and_Recursion</RootNamespace>
-    <AssemblyName>HW3 FileIO and Recursion</AssemblyName>
+    <RootNamespace>CS3020_HW3_FileIO_and_Recursion</RootNamespace>
+    <AssemblyName>CS3020_HW3_FileIO_and_Recursion</AssemblyName>
     <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>

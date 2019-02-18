@@ -5,11 +5,11 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("HW3 FileIO and Recursion")]
+[assembly: AssemblyTitle("CS3020_HW3_FileIO_and_Recursion")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("HW3 FileIO and Recursion")]
+[assembly: AssemblyProduct("CS3020_HW3_FileIO_and_Recursion")]
 [assembly: AssemblyCopyright("Copyright ©  2019")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
@@ -20,7 +20,7 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
-[assembly: Guid("cbc4d56e-b1c8-4e5e-906b-318d11ce5f14")]
+[assembly: Guid("989873f8-3c91-4b9a-ba61-ac40b32885e6")]
 
 // Version information for an assembly consists of the following four values:
 //
