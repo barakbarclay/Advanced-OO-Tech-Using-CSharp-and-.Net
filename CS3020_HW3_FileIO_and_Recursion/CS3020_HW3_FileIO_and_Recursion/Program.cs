@@ -40,8 +40,24 @@ namespace CS3020_HW3_FileIO_and_Recursion
             foreach (string path in paths)
             {
                 // Seperated top level directory search from the rest to not interfere with recursive search
-                FindAndCopyFilesInTopLevelDir(path, fileTypes);
-                FindAndCopyFilesInDirsWithinPath(path, fileTypes);
+                FindAndCopyFilesInCurrentDir(path, fileTypes); // Top level dir call
+                FindAndCopyFilesInDirsWithinPath(path, fileTypes); // All dir's inside top level dir
+            }
+        }
+
+        static void FindAndCopyFilesInCurrentDir(string path, string[] fileTypes)
+        {
+            foreach (string fileType in fileTypes)
+            {
+                string[] dirs = Directory.GetFiles(path, fileType); // Gets array of path names with indicated file type
+                foreach (string dir in dirs)
+                {
+                    string fileName = dir.Substring(path.Length + 1); // String with just file name
+                    string newDir = AppDomain.CurrentDomain.BaseDirectory + "FoundFiles\\C\\" + dir.Substring(3); // New directory path w/ file name
+                    newDir = newDir.Remove(newDir.Length - fileName.Length); // New directory path without file name
+                    Directory.CreateDirectory(newDir); // Creates directory
+                    File.Copy(Path.Combine(dir), Path.Combine(newDir, fileName), true); // Copies file and overwrites if there is a pre-exisiting file
+                }
             }
         }
 
@@ -49,35 +65,8 @@ namespace CS3020_HW3_FileIO_and_Recursion
         {
             foreach (DirectoryInfo directory in new DirectoryInfo(path).GetDirectories())
             {
-                foreach (string fileType in fileTypes)
-                {
-                    string[] dirs = Directory.GetFiles(directory.FullName, fileType); // Gets array of path names with indicated file type
-                    foreach (string dir in dirs)
-                    {
-                        string fileName = dir.Substring(directory.FullName.Length + 1); // String with just file name
-                        string newDir = AppDomain.CurrentDomain.BaseDirectory + "FoundFiles\\C\\" + dir.Substring(3); // New directory path w/ file name
-                        newDir = newDir.Remove(newDir.Length - fileName.Length); // New directory path without file name
-                        Directory.CreateDirectory(newDir); // Creates directory
-                        File.Copy(Path.Combine(dir), Path.Combine(newDir, fileName), true); // Copies file and overwrites if there is a pre-exisiting file
-                    }
-                }
+                FindAndCopyFilesInCurrentDir(directory.FullName, fileTypes); // Searches Current directory
                 FindAndCopyFilesInDirsWithinPath(directory.FullName, fileTypes); // Recursive search
-            }
-        }
-
-        static void FindAndCopyFilesInTopLevelDir(string path, string[] fileTypes)
-        {
-            foreach (string fileType in fileTypes)
-            {
-                string[] dirs = Directory.GetFiles(path, fileType);
-                foreach (string dir in dirs)
-                {
-                    string fileName = dir.Substring(path.Length + 1);
-                    string newDir = AppDomain.CurrentDomain.BaseDirectory + "FoundFiles\\C\\" + dir.Substring(3);
-                    newDir = newDir.Remove(newDir.Length - fileName.Length);
-                    Directory.CreateDirectory(newDir);
-                    File.Copy(Path.Combine(dir), Path.Combine(newDir, fileName), true);
-                }
             }
         }
     }
