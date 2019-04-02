@@ -53,14 +53,14 @@ namespace CollisionDetection
             for (int i = 0; i < 20; i++)
                 squares.Add(new Square(rand.Next(3, 5), new Vector2(rand.Next(0, CollisionMap.Width), rand.Next(0, CollisionMap.Height)), new Vector2(rand.Next(-3, 4), rand.Next(-3, 4))));
 
-            foreach(Square s in squares)
+            foreach (Square s in squares)
             {
                 s.Move();
             }
             /**********************************************************************/
             /* SWITCH THESE LINES OF CODE TO TEST THE DIFFERENT METHODS */
-            CollisionDetection();
-            //CollisionDetectionParallel();
+            //CollisionDetection();
+            CollisionDetectionParallel();
             /**********************************************************************/
             DrawSquares(map);
 
@@ -83,7 +83,7 @@ namespace CollisionDetection
             for (int i = 0; i < squares.Count; i++)
                 squares[i].Color = Color.Black;
 
-            for(int i = 0; i < squares.Count; i++)
+            for (int i = 0; i < squares.Count; i++)
             {
                 for (int j = 0; j < squares.Count; j++)
                 {
@@ -102,14 +102,47 @@ namespace CollisionDetection
         /// </summary>
         public void CollisionDetectionParallel()
         {
-         
+            List<Task> tasks = new List<Task>();
+            int threadCount = 2;
+            int beginingOfThreadIterations = 0;
+            int endOfThreadIterations = squares.Count / threadCount;
+            int ThreadIterations = squares.Count / threadCount;
+
+            for (int i = 0; i < threadCount; i++)
+            {
+                CollisionDetectionParallelTaskCreator(tasks, beginingOfThreadIterations, endOfThreadIterations);
+                beginingOfThreadIterations = endOfThreadIterations;
+                endOfThreadIterations += ThreadIterations;
+            }
         }
 
-        /// <summary>
-        /// Draws the squares on the screen
-        /// </summary>
-        /// <param name="bitmap">The bitmap to update</param>
-        public void DrawSquares(Image bitmap)
+        public void CollisionDetectionParallelTaskCreator(List<Task> tasks, int beginingOfThreadIterations, int endOfThreadIterations)
+        {
+            tasks.Add(Task.Factory.StartNew(() =>
+            {
+                //Reset the color of squares to black.
+                for (int i = beginingOfThreadIterations; i < endOfThreadIterations; i++)
+                    squares[i].Color = Color.Black;
+
+                for (int i = beginingOfThreadIterations; i < endOfThreadIterations; i++)
+                {
+                    for (int j = 0; j < squares.Count; j++)
+                    {
+                        if (squares[i] != squares[j] && squares[i].IsCollidingWith(squares[j]))
+                        {
+                            squares[i].Color = Color.Red;
+                            squares[j].Color = Color.Red;
+                        }
+                    }
+                }
+            }));
+        }
+
+            /// <summary>
+            /// Draws the squares on the screen
+            /// </summary>
+            /// <param name="bitmap">The bitmap to update</param>
+            public void DrawSquares(Image bitmap)
         {
             Graphics g = Graphics.FromImage(bitmap);
             foreach (Square s in squares.Where(t => t.Color == Color.Red))
