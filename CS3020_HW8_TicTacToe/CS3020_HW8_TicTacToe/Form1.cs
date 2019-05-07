@@ -56,12 +56,13 @@ namespace ClientClient
             {
                 Label_Player_Value.Text = "X";
                 AddToConnectionMessageBox("No listener found, opening listener.");
-                RichTextBox_Game_Message.Text = "Your Turn";
+
                 if (TextBox_IP.Text == "")
                 {
                     TcpListener listener = new TcpListener(Dns.GetHostEntry(Dns.GetHostName()).AddressList.FirstOrDefault(ip => ip.AddressFamily == AddressFamily.InterNetwork), 5555);
                     listener.Start();
                     connection = await listener.AcceptTcpClientAsync();
+                    RichTextBox_Game_Message.Text = "Your Turn";
                     await Task.Factory.StartNew(() => ListenForPacket(connection));
                     listener.Stop();
                 }
