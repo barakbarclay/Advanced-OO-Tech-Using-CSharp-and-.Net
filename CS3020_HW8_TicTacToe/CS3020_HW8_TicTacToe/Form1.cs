@@ -43,18 +43,18 @@ namespace ClientClient
         {
             try
             {
-                if (TextBox_IP.Text == "")
-                {
+                //if (TextBox_IP.Text == "")
+                //{
                     connection = new TcpClient(Dns.GetHostEntry(Dns.GetHostName()).AddressList.FirstOrDefault(ip => ip.AddressFamily == AddressFamily.InterNetwork).ToString(), 5555);
-                }
-                else
-                {
-                    connection = new TcpClient(TextBox_IP.Text, 5555);
-                }
+                    //connection = new TcpClient("127.0.0.1", 5555);
+                //}
+                //else
+                //{
+                //    connection = new TcpClient(TextBox_IP.Text, 5555);
+                //}
             }
             catch
             {
-                Label_Player_Value.Text = "X";
                 AddToConnectionMessageBox("No listener found, opening listener.");
 
                 if (TextBox_IP.Text == "")
@@ -62,6 +62,7 @@ namespace ClientClient
                     TcpListener listener = new TcpListener(Dns.GetHostEntry(Dns.GetHostName()).AddressList.FirstOrDefault(ip => ip.AddressFamily == AddressFamily.InterNetwork), 5555);
                     listener.Start();
                     connection = await listener.AcceptTcpClientAsync();
+                    Label_Player_Value.Text = "X";
                     RichTextBox_Game_Message.Text = "Your Turn";
                     await Task.Factory.StartNew(() => ListenForPacket(connection));
                     listener.Stop();
@@ -72,6 +73,8 @@ namespace ClientClient
                     TcpListener listener = new TcpListener(textBoxIP, 5555);
                     listener.Start();
                     connection = await listener.AcceptTcpClientAsync();
+                    Label_Player_Value.Text = "X";
+                    RichTextBox_Game_Message.Text = "Your Turn";
                     await Task.Factory.StartNew(() => ListenForPacket(connection));
                     listener.Stop();
                 }
@@ -145,20 +148,27 @@ namespace ClientClient
             NetworkStream stream = singleConnection.GetStream();
             while (true)
             {
-                byte[] bytesToRead = new byte[singleConnection.ReceiveBufferSize];
-                int bytesRead = stream.Read(bytesToRead, 0, singleConnection.ReceiveBufferSize);
-                string result = Encoding.ASCII.GetString(bytesToRead, 0, bytesRead);
-                if (result != "" && result != "You Lost" && result != "Draw")
+                try
                 {
-                    RichTextBox_Game_Message.Text = "Your Turn";
-                    if (Label_Player_Value.Text == "X")
-                        this.Controls[result].Text = "O";
-                    else
-                        this.Controls[result].Text = "X";
+                    byte[] bytesToRead = new byte[singleConnection.ReceiveBufferSize];
+                    int bytesRead = stream.Read(bytesToRead, 0, singleConnection.ReceiveBufferSize);
+                    string result = Encoding.ASCII.GetString(bytesToRead, 0, bytesRead);
+                    if (result != "" && result != "You Lost" && result != "Draw")
+                    {
+                        RichTextBox_Game_Message.Text = "Your Turn";
+                        if (Label_Player_Value.Text == "X")
+                            this.Controls[result].Text = "O";
+                        else
+                            this.Controls[result].Text = "X";
+                    }
+                    else if (result == "You Lost" || result == "Draw")
+                    {
+                        RichTextBox_Game_Message.Text = result;
+                    }
                 }
-                else if (result == "You Lost" || result == "Draw")
+                catch
                 {
-                    RichTextBox_Game_Message.Text = result;
+                    stream.Close();
                 }
             }
         }
