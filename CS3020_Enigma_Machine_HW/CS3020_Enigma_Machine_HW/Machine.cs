@@ -13,11 +13,20 @@ namespace CS3020_Enigma_Machine_HW
         Rotor right;
         Reflector reflector;
 
-        public Machine(Rotor left, Rotor middle, Rotor right, Reflector reflector)
+        public Machine(Rotor left, int leftStartingPosition, Rotor middle, int middleStartingPosition, Rotor right, int rightStartingPosition, Reflector reflector)
         {
             this.left = left;
+            for (int i = 0; i < leftStartingPosition; i++)
+                left.Rotate();
+            this.left.startingPosition = leftStartingPosition;
             this.middle = middle;
+            for (int i = 0; i < middleStartingPosition; i++)
+                middle.Rotate();
+            this.middle.startingPosition = middleStartingPosition;
             this.right = right;
+            for (int i = 0; i < rightStartingPosition; i++)
+                right.Rotate();
+            this.right.startingPosition = rightStartingPosition;
             this.reflector = reflector;
         }
 
@@ -28,16 +37,15 @@ namespace CS3020_Enigma_Machine_HW
             int outputDigit = right.InputDigitToOutputForwards(middle.InputDigitToOutputForwards(left.InputDigitToOutputForwards(inputIndex)));
             outputDigit = reflector.InputDigitToOutput(outputDigit);
             outputDigit = left.InputDigitToOutputBackwards(middle.InputDigitToOutputBackwards(right.InputDigitToOutputBackwards(outputDigit)));
-            RotateRotor(right);
+
+            Rotate(right);
             return outputDigit;
         }
 
-        //Rotates given rotor
-        void RotateRotor(Rotor rotor)
+        //Rotates given rotor and checks for cases below
+        void Rotate(Rotor rotor)
         {
-            rotor.offsets.Insert(0, rotor.offsets.Last());
-            rotor.offsets.RemoveAt(rotor.offsets.Count - 1);
-            rotor.currentPosition++;
+            rotor.Rotate();
             //Rotates to 0 if current position = 10
             if (rotor.currentPosition == rotor.offsets.Count)
             {
@@ -46,12 +54,12 @@ namespace CS3020_Enigma_Machine_HW
             //Rotates middle after full rotation of right
             if (rotor.currentPosition == rotor.startingPosition && rotor == right)
             {
-                RotateRotor(middle);
+                Rotate(middle);
             }
             //Rotates left after full rotation of middle
             else if (rotor.currentPosition == rotor.startingPosition && rotor == middle)
             {
-                RotateRotor(left);
+                Rotate(left);
             }
         }
     }

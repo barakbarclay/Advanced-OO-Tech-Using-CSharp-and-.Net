@@ -12,17 +12,20 @@ namespace CS3020_Enigma_Machine_HW
         public int currentPosition;
         public int startingPosition;
 
-        public Rotor(List<int> offsets, int startingPosition)
+        public Rotor(List<int> offsets, int currentPosition = 0)
         {
             this.offsets = offsets;
-            this.currentPosition = startingPosition;
-            this.startingPosition = startingPosition;
-            for (int i = 0; i < startingPosition; i++)
+            this.currentPosition = currentPosition;
+        }
+
+        public Rotor(Rotor rotor)
+        {
+            for (int i = 0; i < rotor.offsets.Count; i++)
             {
-                RotateSelfToStartingPosition();
+                offsets.Add(rotor.offsets[i]);
             }
         }
-        
+
         //Path through rotor forwards
         public int InputDigitToOutputForwards(int inputIndex)
         {
@@ -63,11 +66,12 @@ namespace CS3020_Enigma_Machine_HW
             return 0;
         }
 
-        //Rotates list to starting position
-        void RotateSelfToStartingPosition()
+        //Rotates rotor list and increases position
+        public void Rotate()
         {
-            this.offsets.Insert(0, this.offsets.Last());
-            this.offsets.RemoveAt(this.offsets.Count - 1);
+            offsets.Insert(0, offsets.Last());
+            offsets.RemoveAt(offsets.Count - 1);
+            currentPosition++;
         }
     }
 }
